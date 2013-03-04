@@ -4,8 +4,16 @@
 var fs = require('fs'),
   $ = require('jquery'),
   request = require('request'),
+  mongoose = require('mongoose'),
 
   resultDir = 'var/result/';
+
+mongoose.connect('mongodb://localhost/simple_node_parser');
+var CacheSchema = mongoose.Schema({
+  url: String,
+  content: String
+});
+var Cache = mongoose.model('Cache', CacheSchema);
 
 function prepare() {
   if (!fs.existsSync('var')) {
@@ -21,7 +29,7 @@ function load_page(url, callback) {
   request(url, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       console.log('page loaded:', url);
-      callback($(body));
+      callback(body);
     } else {
       console.warn('page did not loaded:', url);
       console.warn(error);
@@ -29,7 +37,25 @@ function load_page(url, callback) {
   });
 }
 
-function parse_page(dom) {
+function get_cached_or_load_page(url, callback) {
+  Cache.findOne({url: url}, function (error, obj) {
+    //console.log(error, obj);
+    if (!error && obj) {
+      console.log('page found in the cache:', url);
+      callback(obj.content);
+    } else {
+      load_page(url, function (content) {
+        var cache = new Cache({url: url, content: content});
+        cache.save(function () {
+          callback(content);
+        });
+      });
+    }
+  });
+}
+
+function parse_page(content) {
+  var dom = $(content);
   return {
     title: dom.find('title').text()
   };
@@ -43,7 +69,7 @@ function save_json(data, filename) {
 prepare();
 ['nodejs.org', 'python.org', 'ya.ru'].forEach(function (host) {
   var url = 'http://' + host + '/';
-  load_page(url, function (dom) {
+  get_cached_or_load_page(url, function (dom) {
     var data = parse_page(dom);
     console.log(data);
     save_json(data, host + '-index.json');
