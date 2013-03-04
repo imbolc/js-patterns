@@ -17,8 +17,8 @@ function prepare() {
 }
 
 function load_page(url, callback) {
+  console.log('load page:', url);
   request(url, function (error, response, body) {
-    console.log('load page:', url);
     if (!error && response.statusCode === 200) {
       console.log('page loaded:', url);
       callback($(body));
@@ -31,8 +31,7 @@ function load_page(url, callback) {
 
 function parse_page(dom) {
   return {
-    title: dom.find('title').text(),
-    currentVersion: dom.find('#intro > p').eq(1).text().split(': v')[1]
+    title: dom.find('title').text()
   };
 }
 
@@ -42,8 +41,12 @@ function save_json(data, filename) {
 }
 
 prepare();
-load_page('http://nodejs.org/', function (dom) {
-  var data = parse_page(dom);
-  console.log(data);
-  save_json(data, 'nodejs-index.json');
+['nodejs.org', 'python.org', 'ya.ru'].forEach(function (host) {
+  var url = 'http://' + host + '/';
+  load_page(url, function (dom) {
+    var data = parse_page(dom);
+    console.log(data);
+    save_json(data, host + '-index.json');
+  });
 });
+
