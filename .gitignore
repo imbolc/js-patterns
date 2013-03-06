@@ -2,3 +2,5 @@ node_modules
 npm-debug.log
 
 /simple-parser/var
+
+/browserify/index-bundle.js
