@@ -3,7 +3,6 @@
 
 function FilmListCtrl($scope, Film) {
     $scope.films = Film.query();
-    console.log($scope.films);
     $scope.orderProp = '-rating';
 
     $scope.incRating = function (film) {
