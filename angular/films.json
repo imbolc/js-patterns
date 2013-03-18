@@ -1,0 +1,5 @@
+[
+    {"id": 1, "rating": 5, "year": 2004, "title": "Kinsey"},
+    {"id": 2, "rating": 3, "year": 2009, "title": "Watchmen"},
+    {"id": 3, "rating": 4, "year": 2004, "title": "A Home at the End of the World"}
+]
