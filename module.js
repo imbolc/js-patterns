@@ -1,19 +1,19 @@
 var mod = (function () {
-  "use strict";
+    "use strict";
 
-  var private_var = 'hello world!';
+    var private_var = 'hello world!';
 
-  function private_method() {
-    return private_var;
-  }
+    function private_method() {
+        return private_var;
+    }
 
-  function public_method() {
-    console.log(private_method());
-  }
+    function public_method() {
+        console.log(private_method());
+    }
 
-  return {
-    public_method: public_method
-  };
+    return {
+        public_method: public_method
+    };
 
 }());
 
