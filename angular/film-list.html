@@ -12,7 +12,7 @@
 <table>
   <tr><th>title</th><th>year</th><th>rating</th><th>actions</th></tr>
   <tr ng-repeat="film in films | filter:query | orderBy:orderProp">
-    <td><a href="#/films/{{ film.id }}">{{ film.title }}</a></td>
+    <td><a href="/#/films/{{ film.id }}">{{ film.title }}</a></td>
     <td>{{ film.year }}</td> 
     <td>{{ film.rating | starRating }}</td>
     <td><a href="" ng-click="incRating(film)">increace rating</a></td>
